@@ -11,8 +11,7 @@
 */
 
 #include <stdbool.h>
-
- typedef int tipoElementoCola;
+ typedef unsigned long tipoElementoCola;
  typedef struct celdaC{
 	 tipoElementoCola elem;
 	 struct celdaC *sig;
