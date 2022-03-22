@@ -12,7 +12,7 @@ typedef struct celdaC{
 typedef struct tipoC{
     celdaCola* ini;
     celdaCola* fin;
-    int tam;
+    int tamMax;
 } tipoCola;
 
 void nuevaColaDoble(tipoCola *, int);

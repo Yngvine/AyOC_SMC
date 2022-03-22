@@ -8,7 +8,7 @@
 void nuevaColaDoble(tipoCola *c, int t) {
     c->ini = NULL;
     c->fin = NULL;
-    c->tam = t;
+    c->tamMax = t;
 }
 
 void encolarDireccion(tipoCola *c, etiquetaDireccion e) {
@@ -80,5 +80,5 @@ bool estaLlenaCola(tipoCola c) {
         tam++;
         aux = aux->sig;
     }
-    return(tam >= c.tam);
+    return(tam >= c.tamMax);
 }
