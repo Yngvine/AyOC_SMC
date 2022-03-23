@@ -26,7 +26,7 @@ int main(void) {
     unsigned long numeroConjunto;
     unsigned long etiqueta;
     f = fopen("traza.txt", "r");
-    char buffer[11];
+    char buffer[18];
     while (fscanf(f,"%s ", buffer) > 0) {
         direccion = strtol(buffer, NULL, 16);
         numeroConjunto = rangobits(indiceBit+1, indiceConjunto, direccion);
