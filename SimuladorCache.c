@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <strings.h>
+#include <string.h>
+#include <limits.h>
 #include "colaDirecciones.h"
 unsigned long int rangobits (int bitmenor, int bitmayor, unsigned long int n);
 int LOG2(int n);
@@ -7,7 +10,7 @@ int LOG2(int n);
 int main(void) {
     FILE * f;
     int Nlin, Tlin, Asoc, VC, accesos = 0, fallos = 0;
-    f = fopen("config.txt", "r");
+    f = fopen("../config.txt", "r");
     fscanf (f, "Nlin: %d\n", &Nlin);
     fscanf (f, "Tlin: %d\n", &Tlin);
     fscanf (f, "Asoc: %d\n", &Asoc);
@@ -17,19 +20,23 @@ int main(void) {
     int indiceBit = LOG2(Tlin)-1;
     int numeroConjuntos = Nlin/Asoc;
     int indiceConjunto = LOG2(numeroConjuntos) + indiceBit;
+
     tipoCola * memoriaCache;
     celdaCola * lineaMC;
     memoriaCache = (tipoCola *) malloc(sizeof(tipoCola) * numeroConjuntos);
     for (int i=0; i<numeroConjuntos; i++)
         nuevaColaDoble(&(memoriaCache[i]), Asoc);
-    unsigned long direccion;
+    unsigned long long direccion;
     unsigned long numeroConjunto;
     unsigned long etiqueta;
-    f = fopen("traza.txt", "r");
-    char buffer[18];
+    f = fopen("../traza.txt", "r");
+    char buffer[19];
     while (fscanf(f,"%s ", buffer) > 0) {
-        direccion = strtol(buffer, NULL, 16);
-        numeroConjunto = rangobits(indiceBit+1, indiceConjunto, direccion);
+        direccion = strtoull(buffer, NULL, 16);
+        if (numeroConjuntos > 1)
+            numeroConjunto = rangobits(indiceBit+1, indiceConjunto, direccion);
+        else
+            numeroConjunto = 0;
         etiqueta = rangobits(indiceConjunto+1, 47, direccion);
 
         lineaMC = posicionDireccion(memoriaCache[numeroConjunto], etiqueta);
@@ -46,7 +53,7 @@ int main(void) {
         }
     }
     fclose(f);
-    printf("Accesos realizados: %d\nFallos encontrados: %d", accesos, fallos);
+    printf("Accesos realizados: %d\nFallos encontrados: %d\nTasa de fallos. %.4f", accesos, fallos, ((float)fallos/(float)accesos));
 }
 
 unsigned long int rangobits (int bitmenor, int bitmayor, unsigned long int n) {

@@ -30,6 +30,7 @@ void encolarCelda(tipoCola * c, celdaCola * d) {
         c->fin = d;
         c->ini = d;
     } else {
+        d->sig = c->ini;
         c->ini->ant = d;
         c->ini = d;
     }
@@ -45,6 +46,8 @@ void desencolarCelda(tipoCola *c, celdaCola *d) {
             c->fin = d->ant;
         else
             d->sig->ant = d->ant;
+        d->sig = NULL;
+        d->ant = NULL;
     }else
         printf("No se puede desencolar cola vacia\n");
 }
