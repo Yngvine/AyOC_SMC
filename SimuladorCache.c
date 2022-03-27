@@ -21,9 +21,12 @@ int main(void) {
     int numeroConjuntos = Nlin/Asoc;
     int indiceConjunto = LOG2(numeroConjuntos) + indiceBit;
 
-    tipoCola * memoriaCache;
-    celdaCola * lineaMC;
+    tipoCola * memoriaCache, victimCache;
+    celdaCola * lineaMC, * lineaVC;
     memoriaCache = (tipoCola *) malloc(sizeof(tipoCola) * numeroConjuntos);
+    if (VC > 0)
+        nuevaColaDoble(&victimCache, VC);
+
     for (int i=0; i<numeroConjuntos; i++)
         nuevaColaDoble(&(memoriaCache[i]), Asoc);
     unsigned long long direccion;
@@ -40,20 +43,44 @@ int main(void) {
         etiqueta = rangobits(indiceConjunto+1, 47, direccion);
 
         lineaMC = posicionDireccion(memoriaCache[numeroConjunto], etiqueta);
-        if (lineaMC != NULL) {
-            accesos++;
+        accesos++;
+        //printf("%llX\n", direccion);
+
+
+        if (lineaMC != NULL) { //Linea en MC
             desencolarCelda(&memoriaCache[numeroConjunto], lineaMC);
             encolarCelda(&memoriaCache[numeroConjunto], lineaMC);
         } else {
-            accesos++;
-            fallos++;
-            if (estaLlenaCola(memoriaCache[numeroConjunto]))
-                desencolarLRU(&memoriaCache[numeroConjunto]);
-            encolarDireccion(&memoriaCache[numeroConjunto], etiqueta);
+            if (VC > 0) { //Si existe VC
+                lineaVC = posicionDireccion(victimCache, etiqueta);
+                if (lineaVC != NULL) { //Linea en VC
+                    if (estaLlenaCola(memoriaCache[numeroConjunto])) { //Conjunto en MC lleno
+                        lineaMC = desencolarLRU(&memoriaCache[numeroConjunto]);
+                        desencolarCelda(&victimCache, lineaVC);
+                        encolarCelda(&victimCache, lineaMC);
+                        encolarCelda(&memoriaCache[numeroConjunto], lineaVC);
+                    } else {
+                        desencolarCelda(&victimCache, lineaVC);
+                        encolarCelda(&memoriaCache[numeroConjunto], lineaVC);
+                    }
+                } else { //Linea no hallada
+                    fallos++;
+                    if (estaLlenaCola(victimCache))
+                        free(desencolarLRU(&victimCache));
+                    if (estaLlenaCola(memoriaCache[numeroConjunto]))
+                        encolarCelda(&victimCache, desencolarLRU(&memoriaCache[numeroConjunto]));
+                    encolarDireccion(&memoriaCache[numeroConjunto], etiqueta);
+                }
+            } else {
+                fallos++;
+                if (estaLlenaCola(memoriaCache[numeroConjunto]))
+                    free(desencolarLRU(&memoriaCache[numeroConjunto]));
+                encolarDireccion(&memoriaCache[numeroConjunto], etiqueta);
+            }
         }
     }
     fclose(f);
-    printf("Accesos realizados: %d\nFallos encontrados: %d\nTasa de fallos. %.4f", accesos, fallos, ((float)fallos/(float)accesos));
+    printf("Accesos realizados: %d\nFallos encontrados: %d\nTasa de fallos: %.2f%%", accesos, fallos, ((float)fallos/(float)accesos)*100);
 }
 
 unsigned long int rangobits (int bitmenor, int bitmayor, unsigned long int n) {

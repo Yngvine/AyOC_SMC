@@ -23,7 +23,7 @@ void encolarCelda(tipoCola *, celdaCola *);
 
 void desencolarCelda(tipoCola *, celdaCola *);
 
-void desencolarLRU(tipoCola *);
+celdaCola * desencolarLRU(tipoCola *);
 
 celdaCola * posicionDireccion(tipoCola , etiquetaDireccion);
 

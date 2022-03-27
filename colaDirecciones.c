@@ -52,16 +52,22 @@ void desencolarCelda(tipoCola *c, celdaCola *d) {
         printf("No se puede desencolar cola vacia\n");
 }
 
-void desencolarLRU(tipoCola *c) {
+celdaCola * desencolarLRU(tipoCola *c) {
     if (!esNulaCola(*c)) {
         celdaCola *aux;
+        if (c->fin == c->ini)
+            c->ini = NULL;
         aux = c->fin;
-        c->fin = (c->fin)->ant;
+        c->fin = aux->ant;
         if(c->fin != NULL)
             (c->fin)->sig = NULL;
-        free(aux);
-    } else
+        aux->sig = NULL;
+        aux->ant = NULL;
+        return aux;
+    } else {
         printf("No se puede desencolar cola vaciaLRU\n");
+        return NULL;
+    }
 }
 
 celdaCola * posicionDireccion(tipoCola c, etiquetaDireccion e) {
