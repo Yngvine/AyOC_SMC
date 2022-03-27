@@ -31,18 +31,20 @@ int main(void) {
         nuevaColaDoble(&(memoriaCache[i]), Asoc);
     unsigned long long direccion;
     unsigned long numeroConjunto;
-    unsigned long etiqueta;
+    unsigned long etiquetayset;
     f = fopen("../traza.txt", "r");
     char buffer[19];
+    int c = 0;
     while (fscanf(f,"%s ", buffer) > 0) {
+        c++;
         direccion = strtoull(buffer, NULL, 16);
         if (numeroConjuntos > 1)
             numeroConjunto = rangobits(indiceBit+1, indiceConjunto, direccion);
         else
             numeroConjunto = 0;
-        etiqueta = rangobits(indiceConjunto+1, 47, direccion);
+        etiquetayset = rangobits(indiceBit+1, 47, direccion);
 
-        lineaMC = posicionDireccion(memoriaCache[numeroConjunto], etiqueta);
+        lineaMC = posicionDireccion(memoriaCache[numeroConjunto], etiquetayset);
         accesos++;
         //printf("%llX\n", direccion);
 
@@ -52,7 +54,7 @@ int main(void) {
             encolarCelda(&memoriaCache[numeroConjunto], lineaMC);
         } else {
             if (VC > 0) { //Si existe VC
-                lineaVC = posicionDireccion(victimCache, etiqueta);
+                lineaVC = posicionDireccion(victimCache, etiquetayset);
                 if (lineaVC != NULL) { //Linea en VC
                     if (estaLlenaCola(memoriaCache[numeroConjunto])) { //Conjunto en MC lleno
                         lineaMC = desencolarLRU(&memoriaCache[numeroConjunto]);
@@ -69,13 +71,13 @@ int main(void) {
                         free(desencolarLRU(&victimCache));
                     if (estaLlenaCola(memoriaCache[numeroConjunto]))
                         encolarCelda(&victimCache, desencolarLRU(&memoriaCache[numeroConjunto]));
-                    encolarDireccion(&memoriaCache[numeroConjunto], etiqueta);
+                    encolarDireccion(&memoriaCache[numeroConjunto], etiquetayset);
                 }
             } else {
                 fallos++;
                 if (estaLlenaCola(memoriaCache[numeroConjunto]))
                     free(desencolarLRU(&memoriaCache[numeroConjunto]));
-                encolarDireccion(&memoriaCache[numeroConjunto], etiqueta);
+                encolarDireccion(&memoriaCache[numeroConjunto], etiquetayset);
             }
         }
     }

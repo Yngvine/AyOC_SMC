@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-typedef unsigned long etiquetaDireccion;
+typedef unsigned long long etiquetaDireccion;
 typedef struct celdaC{
     etiquetaDireccion elem;
     struct celdaC *ant;
