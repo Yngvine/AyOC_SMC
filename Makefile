@@ -1,10 +1,10 @@
-: cmpSimulador cmpTraza cmpCola
+all: cmpSimulador cmpTraza cmpCola
 
 cmpSimulador: cmpCola
-  gcc SimuladorCache.c colaDirecciones.o -o SimuladorCache -Wall
+	gcc SimuladorCache.c colaDirecciones.o -o SimuladorCache -Wall
 
 cmpCola:
-  gcc colaDirecciones.c -c -Wall
+	gcc colaDirecciones.c -c -Wall
 
-cmpTraza: creaTrazaTXT.c
-  gcc creaTrazaTXT.c -o creaTrazaTXT -Wall
+cmpTraza:
+	gcc creaTrazaTXT.c -o creaTrazaTXT -Wall
