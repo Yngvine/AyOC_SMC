@@ -1,4 +1,4 @@
 Nlin: 1024
 Tlin: 64
 Asoc: 8
-VC: 32
+VC:32

@@ -1,7 +1,10 @@
 #include <stdio.h>
-#include <stdlib.h>
 #define MAX 100
-#define FILENAME "../traza.txt"
+#if defined(__linux__) || defined(__unix__)
+#define TRAZAFILEPATH "traza.txt"
+#elif defined(_WIN32) || defined(_WIN64)
+#define TRAZAFILEPATH "../traza.txt"
+#endif
 
 void ex1();
 void ex2();
@@ -18,7 +21,7 @@ int main(void) {
 void ex1() {
     double v[MAX], res;
     FILE *f;
-    f = fopen(FILENAME,"w");
+    f = fopen(TRAZAFILEPATH,"w");
     for (int i = 0; i < MAX; i++) {
         res = res + v[i];
         fprintf(f, "%p ", &v[i]);
@@ -28,7 +31,7 @@ void ex1() {
 
 void ex2() {
     FILE *f;
-    f = fopen(FILENAME,"w");
+    f = fopen(TRAZAFILEPATH,"w");
     unsigned long dirBase = 0x0000;
     int columnas = 1024, filas =4;
 
@@ -41,7 +44,7 @@ void ex2() {
 
 void ex3() {
     FILE *f;
-    f = fopen(FILENAME,"w");
+    f = fopen(TRAZAFILEPATH,"w");
     unsigned long dirBase = 0x0000;
     int columnas = 8, filas = 5;
 

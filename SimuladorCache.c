@@ -2,15 +2,23 @@
 #include <stdlib.h>
 #include <strings.h>
 #include <string.h>
-#include <limits.h>
 #include "colaDirecciones.h"
+
+#if defined(__linux__) || defined(__unix__)
+#define CONFIGFILEPATH "config.txt"
+#define TRAZAFILEPATH "traza.txt"
+#elif defined(_WIN32) || defined(_WIN64)
+#define CONFIGFILEPATH "../config.txt"
+#define TRAZAFILEPATH "../traza.txt"
+#endif
+
 unsigned long long int rangobits (int bitmenor, int bitmayor, unsigned long int n);
 int LOG2(int n);
 
 int main(void) {
     FILE * f;
     int Nlin, Tlin, Asoc, VC, accesos = 0, fallos = 0;
-    f = fopen("../config.txt", "r");
+    f = fopen(CONFIGFILEPATH, "r");
     fscanf (f, "Nlin: %d\n", &Nlin);
     fscanf (f, "Tlin: %d\n", &Tlin);
     fscanf (f, "Asoc: %d\n", &Asoc);
@@ -34,15 +42,16 @@ int main(void) {
     unsigned long long direccion, etiquetayset; //Para evitar conflictos en algunos sistemas con direcciones mas largas se declaran como unsigned long long
     unsigned long numeroConjunto;
     char buffer[20]; //Buffer de lectura para el fichero
-    bzero(buffer, sizeof(buffer));
+    memset(buffer, 0, sizeof(buffer));
 
-    f = fopen("../traza.txt", "r"); //Apertura del fichero
+    f = fopen(TRAZAFILEPATH, "r"); //Apertura del fichero
+
 
     int c = 0;//VARIABLE PARA DEBUGGING
     while (fscanf(f,"%s ", buffer) > 0) {
         c++;
         direccion = strtoull(buffer, NULL, 16); //Traduccion de char* a unsigned long long
-        bzero(buffer, sizeof(buffer));
+        memset(buffer, 0, sizeof(buffer));
 
         if (numeroConjuntos > 1) //MC NO es totalmente asociativa
             numeroConjunto = rangobits(indiceBit+1, indiceConjunto, direccion);
