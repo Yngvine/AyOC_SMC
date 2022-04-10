@@ -1,8 +1,9 @@
 #include <stdio.h>
+
 #define MAX 100
-#if defined(__linux__) || defined(__unix__)
+#if defined(__linux__) || defined(__unix__) //Direccion en linux
 #define TRAZAFILEPATH "traza.txt"
-#elif defined(_WIN32) || defined(_WIN64)
+#elif defined(_WIN32) || defined(_WIN64) //Direccion en windows
 #define TRAZAFILEPATH "../traza.txt"
 #endif
 
