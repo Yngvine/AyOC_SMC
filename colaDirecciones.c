@@ -1,6 +1,3 @@
-//
-// Created by igor on 21/10/21.
-//
 #include "colaDirecciones.h"
 #include <stdio.h>
 #include <stdlib.h>
