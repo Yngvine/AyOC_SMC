@@ -12,9 +12,21 @@ void ex2();
 void ex3();
 
 int main(void) {
-    //ex1();
-    //ex2();
-    ex3();
+    printf("Elija una de las opciones para crear el fichero de traza\n"
+           "1.Acceso secuencial a un vector de %d elementos double\n"
+           "2.Acceso a matriz de 4x1024 elementos double recorriendola\n por columnas\n"
+           "3.Acceso a matriz de 5x8 elemtos double recorriendola por\n columnas\n",MAX);
+    int resp;
+    scanf("%d", &resp);
+
+    if (resp == 1)
+        ex1();
+    else if (resp == 2)
+        ex2();
+    else if (resp == 3)
+        ex3();
+    else
+        printf("ERROR: Opcion fuera de rango");
 
     return(0);
 }
